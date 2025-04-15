@@ -27,3 +27,11 @@ def get_most_popular():
     from app import mongo
     movies = Movie.get_most_popular(mongo)
     return jsonify(movies)
+
+@movies_bp.route("/<movie_id>", methods=["GET"])
+def get_movie_by_id(movie_id):
+    from app import mongo
+    movie = mongo.db.movies.find_one({"id": movie_id})
+    if movie:
+        return jsonify(movie)
+    return jsonify({"message": "Movie not found"}), 404
