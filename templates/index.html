@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AfroMovies API</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="hero">
+        <nav>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="AfroMovies Logo" class="logo-img">
+                <span>AfroMovies API</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/api">Documentation</a></li>
+                <li><a href="https://github.com/yourusername/afro-movies-api" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+
+        <div class="hero-content">
+            <h1>AfroMovies API</h1>
+            <p>A powerful RESTful API for accessing African cinema and global movies data</p>
+            <div class="cta-buttons">
+                <a href="/api" class="btn primary">View Documentation</a>
+                <a href="https://github.com/yourusername/afro-movies-api" class="btn secondary">GitHub <i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <section class="features">
+        <div class="container">
+            <h2>Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <h3>Extensive Movie Database</h3>
+                    <p>Access thousands of movies with detailed information including ratings, categories, and more.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Fast & Reliable</h3>
+                    <p>Built on a robust architecture ensuring quick response times and high availability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Secure Authentication</h3>
+                    <p>JWT-based authentication system to secure your application's data and user interactions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Developer Friendly</h3>
+                    <p>Clear documentation, predictable response formats, and intuitive endpoint design.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="getting-started">
+        <div class="container">
+            <h2>Getting Started</h2>
+            <div class="code-example">
+                <div class="code-header">
+                    <span>Example: Get Popular Movies</span>
+                    <button class="copy-btn" onclick="copyToClipboard('codeExample')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+                <pre id="codeExample"><code>
+fetch('https://afro-movies-api.onrender.com/api/movies/popular')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+                </code></pre>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Register for an API Key</h3>
+                        <p>Create an account to get your unique API key for authentication.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Explore the Documentation</h3>
+                        <p>Learn about all available endpoints and how to use them effectively.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Integrate with Your Application</h3>
+                        <p>Use our comprehensive guides to integrate the API into your project.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="use-cases">
+        <div class="container">
+            <h2>Use Cases</h2>
+            <div class="use-case-grid">
+                <div class="use-case-card">
+                    <h3>Movie Streaming Platforms</h3>
+                    <p>Access comprehensive movie metadata to enhance your streaming service with detailed information and recommendations.</p>
+                </div>
+                <div class="use-case-card">
+                    <h3>Mobile Applications</h3>
+                    <p>Build engaging movie discovery apps with our rich dataset including African cinema and international titles.</p>
+                </div>
+                <div class="use-case-card">
+                    <h3>Educational Projects</h3>
+                    <p>Perfect for students and educators working on film studies, data analysis, or web development projects.</p>
+                </div>
+                <div class="use-case-card">
+                    <h3>Content Creators</h3>
+                    <p>Access accurate movie data for reviews, blogs, videos, and other cinema-related content.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="AfroMovies Logo">
+                    <span>AfroMovies API</span>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="/api">Documentation</a></li>
+                            <li><a href="#">API Status</a></li>
+                            <li><a href="#">Pricing</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>About</h4>
+                        <ul>
+                            <li><a href="#">Company</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 AfroMovies API. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

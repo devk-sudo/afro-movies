@@ -1,5 +1,4 @@
-# app.py
-from flask import Flask
+from flask import Flask, render_template
 from flask_pymongo import PyMongo
 from flask_jwt_extended import JWTManager
 from config import Config
@@ -16,7 +15,7 @@ mongo = PyMongo(app)
 if mongo.db is None:
     raise RuntimeError("MongoDB connection failed: mongo.db is None")
 try:
-    mongo.db.command("ping")  # Sends a ping command to the MongoDB server
+    mongo.db.command("ping")
 except Exception as e:
     raise RuntimeError(f"Failed to connect to MongoDB: {str(e)}")
 
@@ -27,9 +26,15 @@ jwt = JWTManager(app)
 app.register_blueprint(movies_bp, url_prefix="/api/movies")
 app.register_blueprint(users_bp, url_prefix="/api/users")
 
+# Home page route
 @app.route("/")
 def home():
-    return "AfroMovies API is running!"
+    return render_template('index.html')
+
+# API documentation route
+@app.route("/api")
+def api_docs():
+    return render_template('api-docs.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AfroMovies API Documentation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/docs.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+    <div class="documentation-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="AfroMovies Logo">
+                    <span>AfroMovies API</span>
+                </div>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#introduction" class="nav-link active">Introduction</a></li>
+                    <li><a href="#authentication" class="nav-link">Authentication</a></li>
+                    <li>
+                        <a href="#movies-endpoints" class="nav-link">Movies Endpoints</a>
+                        <ul class="sub-nav">
+                            <li><a href="#get-all-movies" class="nav-link">Get All Movies</a></li>
+                            <li><a href="#get-movie-by-id" class="nav-link">Get Movie by ID</a></li>
+                            <li><a href="#get-latest-movies" class="nav-link">Get Latest Movies</a></li>
+                            <li><a href="#get-popular-movies" class="nav-link">Get Popular Movies</a></li>
+                            <li><a href="#get-movies-by-category" class="nav-link">Get Movies by Category</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#users-endpoints" class="nav-link">Users Endpoints</a>
+                        <ul class="sub-nav">
+                            <li><a href="#register-user" class="nav-link">Register User</a></li>
+                            <li><a href="#login-user" class="nav-link">Login User</a></li>
+                            <li><a href="#get-favorites" class="nav-link">Get Favorites</a></li>
+                            <li><a href="#add-favorite" class="nav-link">Add Favorite</a></li>
+                            <li><a href="#get-cart" class="nav-link">Get Cart</a></li>
+                            <li><a href="#add-to-cart" class="nav-link">Add to Cart</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#error-handling" class="nav-link">Error Handling</a></li>
+                    <li><a href="#rate-limiting" class="nav-link">Rate Limiting</a></li>
+                    <li><a href="#sdk-libraries" class="nav-link">SDK Libraries</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="/" class="btn-back">
+                    <i class="fas fa-home"></i> Back to Homepage
+                </a>
+            </div>
+        </aside>
+
+        <main class="content">
+            <header class="doc-header">
+                <div class="container">
+                    <h1>AfroMovies API</h1>
+                    <p>Powerful, flexible, and developer-friendly API for African movie data</p>
+                </div>
+            </header>
+            <section id="introduction" class="doc-section">
+                <div class="section-header">
+                    <h1>Introduction</h1>
+                    <div class="badge-container">
+                        <span class="badge version">v1.2.0</span>
+                        <span class="badge status">Active</span>
+                    </div>
+                </div>
+                <p class="lead">Welcome to the AfroMovies API documentation. This API provides comprehensive access to a rich database of African movies and global cinema, designed to help developers integrate movie data into their applications.</p>
+                
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3>Base URL</h3>
+                        <div class="code-snippet">
+                            <code>https://afro-movies-api.onrender.com</code>
+                            <button class="copy-btn" onclick="copyText('https://afro-movies-api.onrender.com')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>Response Format</h3>
+                        <p>All API responses are returned in JSON format</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Rate Limits</h3>
+                        <p>Free tier: 100 requests/hour</p>
+                        <p>Pro tier: 10,000 requests/hour</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="authentication" class="doc-section">
+                <h2>Authentication</h2>
+                <p>The AfroMovies API uses JWT (JSON Web Tokens) for authentication. Protected endpoints require a valid JWT token in the Authorization header.</p>
+                
+                <div class="auth-card">
+                    <h3>Authentication Header</h3>
+                    <div class="code-snippet">
+                        <code>Authorization: Bearer &lt;your-jwt-token&gt;</code>
+                        <button class="copy-btn" onclick="copyText('Authorization: Bearer your-jwt-token')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="callout info">
+                    <div class="callout-icon"><i class="fas fa-info-circle"></i></div>
+                    <div class="callout-content">
+                        <h4>Token Expiration</h4>
+                        <p>JWT tokens expire after 24 hours. You'll need to generate a new token using the login endpoint after expiration.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="movies-endpoints" class="doc-section">
+                <h2>Movies Endpoints</h2>
+                <p>These endpoints allow you to retrieve movie information from our database.</p>
+                
+                <div id="get-all-movies" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/api/movies/all</span>
+                        <span class="badge">Public</span>
+                    </div>
+                    <div class="endpoint-description">
+                        <p>Returns all movies available in the database.</p>
+                        
+                        <div class="tabs">
+                            <div class="tab-header">
+                                <button class="tab-btn active" onclick="openTab(event, 'all-movies-request')">Request</button>
+                                <button class="tab-btn" onclick="openTab(event, 'all-movies-response')">Response</button>
+                                <button class="tab-btn" onclick="openTab(event, 'all-movies-example')">Example</button>
+                            </div>
+                            
+                            <div id="all-movies-request" class="tab-content active">
+                                <pre class="code-block"><code class="language-http">GET /api/movies/all HTTP/1.1
+Host: afro-movies-api.onrender.com</code></pre>
+                            </div>
+                            
+                            <div id="all-movies-response" class="tab-content">
+                                <pre class="code-block"><code class="language-json">[
+  {
+    "id": "movie1",
+    "title": "The Avengers",
+    "category": "Action",
+    "release_date": "2012-05-04",
+    "views": 1500000,
+    "posterUrl": "https://example.com/posters/avengers.jpg",
+    "rating": 4.8,
+    "year": "2012",
+    "duration": "2h 23m",
+    "genre": "Action, Adventure, Sci-Fi",
+    "downloadCount": 500000
+  },
+  {
+    "id": "movie2",
+    "title": "Black Panther",
+    "category": "Action",
+    "release_date": "2018-02-16",
+    "views": 1800000,
+    "posterUrl": "https://example.com/posters/black-panther.jpg",
+    "rating": 4.7,
+    "year": "2018",
+    "duration": "2h 14m",
+    "genre": "Action, Adventure, Sci-Fi",
+    "downloadCount": 750000
+  }
+  // More movies...
+]</code></pre>
+                            </div>
+                            
+                            <div id="all-movies-example" class="tab-content">
+                                <h4>JavaScript Fetch Example</h4>
+                                <pre class="code-block"><code class="language-javascript">fetch('https://afro-movies-api.onrender.com/api/movies/all')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));</code></pre>
+                                
+                                <h4>Python Example</h4>
+                                <pre class="code-block"><code class="language-python">import requests
+
+response = requests.get('https://afro-movies-api.onrender.com/api/movies/all')
+movies = response.json()
+print(movies)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="get-movie-by-id" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/api/movies/{id}</span>
+                        <span class="badge">Public</span>
+                    </div>
+                    <div class="endpoint-description">
+                        <p>Returns a specific movie by its ID.</p>
+                        
+                        <h4>Path Parameters</h4>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>Unique identifier for the movie</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="tabs">
+                            <div class="tab-header">
+                                <button class="tab-btn active" onclick="openTab(event, 'movie-id-request')">Request</button>
+                                <button class="tab-btn" onclick="openTab(event, 'movie-id-response')">Response</button>
+                                <button class="tab-btn" onclick="openTab(event, 'movie-id-example')">Example</button>
+                            </div>
+                            
+                            <div id="movie-id-request" class="tab-content active">
+                                <pre class="code-block"><code class="language-http">GET /api/movies/movie1 HTTP/1.1
+Host: afro-movies-api.onrender.com</code></pre>
+                            </div>
+                            
+                            <div id="movie-id-response" class="tab-content">
+                                <pre class="code-block"><code class="language-json">{
+  "id": "movie1",
+  "title": "The Avengers",
+  "category": "Action",
+  "release_date": "2012-05-04",
+  "views": 1500000,
+  "posterUrl": "https://example.com/posters/avengers.jpg",
+  "rating": 4.8,
+  "year": "2012",
+  "duration": "2h 23m",
+  "genre": "Action, Adventure, Sci-Fi",
+  "downloadCount": 500000
+}</code></pre>
+                            </div>
+                            
+                            <div id="movie-id-example" class="tab-content">
+                                <h4>JavaScript Fetch Example</h4>
+                                <pre class="code-block"><code class="language-javascript">fetch('https://afro-movies-api.onrender.com/api/movies/movie1')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional movie endpoints would be added here with similar structure -->
+                <div class="endpoints-collapsed">
+                    <div id="get-latest-movies" class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-path">/api/movies/latest</span>
+                            <span class="badge">Public</span>
+                        </div>
+                        <div class="endpoint-description">
+                            <p>Returns the latest movies, sorted by release date (descending).</p>
+                        </div>
+                    </div>
+                    
+                    <div id="get-popular-movies" class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-path">/api/movies/popular</span>
+                            <span class="badge">Public</span>
+                        </div>
+                        <div class="endpoint-description">
+                            <p>Returns the most popular movies, sorted by views (descending).</p>
+                        </div>
+                    </div>
+                    
+                    <div id="get-movies-by-category" class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-path">/api/movies/category/{category}</span>
+                            <span class="badge">Public</span>
+                        </div>
+                        <div class="endpoint-description">
+                            <p>Returns movies by a specific category (e.g., Action, Drama).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="users-endpoints" class="doc-section">
+                <h2>Users Endpoints</h2>
+                <p>These endpoints handle user authentication and management of user-specific data like favorites and cart.</p>
+                
+                <div id="register-user" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/users/register</span>
+                        <span class="badge">Public</span>
+                    </div>
+                    <div class="endpoint-description">
+                        <p>Registers a new user in the system.</p>
+                        
+                        <h4>Request Body</h4>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>username</td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>User's unique username</td>
+                                </tr>
+                                <tr>
+                                    <td>password</td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>User's password (min 8 characters)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="tabs">
+                            <div class="tab-header">
+                                <button class="tab-btn active" onclick="openTab(event, 'register-request')">Request</button>
+                                <button class="tab-btn" onclick="openTab(event, 'register-response')">Response</button>
+                                <button class="tab-btn" onclick="openTab(event, 'register-example')">Example</button>
+                            </div>
+                            
+                            <div id="register-request" class="tab-content active">
+                                <pre class="code-block"><code class="language-http">POST /api/users/register HTTP/1.1
+Host: afro-movies-api.onrender.com
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "password": "newpassword"
+}</code></pre>
+                            </div>
+                            
+                            <div id="register-response" class="tab-content">
+                                <pre class="code-block"><code class="language-json">{
+  "message": "User registered successfully"
+}</code></pre>
+                            </div>
+                            
+                            <div id="register-example" class="tab-content">
+                                <h4>JavaScript Fetch Example</h4>
+                                <pre class="code-block"><code class="language-javascript">fetch('https://afro-movies-api.onrender.com/api/users/register', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    username: 'newuser',
+    password: 'newpassword'
+  }),
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="login-user" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/users/login</span>
+                        <span class="badge">Public</span>
+                    </div>
+                    <div class="endpoint-description">
+                        <p>Logs in a user and returns a JWT token for authentication.</p>
+                        
+                        <div class="callout info">
+                            <div class="callout-icon"><i class="fas fa-info-circle"></i></div>
+                            <div class="callout-content">
+                                <p>The returned JWT token should be included in the Authorization header for authenticated requests.</p>
+                            </div>
+                        </div>
+                        
+                        <h4>Request Body</h4>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>username</td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>User's username</td>
+                                </tr>
+                                <tr>
+                                    <td>password</td>
+                                    <td>string</td>
+                                    <td>Yes</td>
+                                    <td>User's password</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="tabs">
+                            <div class="tab-header">
+                                <button class="tab-btn active" onclick="openTab(event, 'login-request')">Request</button>
+                                <button class="tab-btn" onclick="openTab(event, 'login-response')">Response</button>
+                            </div>
+                            
+                            <div id="login-request" class="tab-content active">
+                                <pre class="code-block"><code class="language-http">POST /api/users/login HTTP/1.1
+Host: afro-movies-api.onrender.com
+Content-Type: application/json
+
+{
+  "username": "sampleuser",
+  "password": "samplepass"
+}</code></pre>
+                            </div>
+                            
+                            <div id="login-response" class="tab-content">
+                                <pre class="code-block"><code class="language-json">{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional user endpoints would be added here -->
+                <div class="endpoints-collapsed">
+                    <div id="get-favorites" class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-path">/api/users/favorites</span>
+                            <span class="badge">Authenticated</span>
+                        </div>
+                        <div class="endpoint-description">
+                            <p>Returns the user's favorite movies. Requires authentication.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="add-favorite" class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="endpoint-path">/api/users/favorites</span>
+                            <span class="badge">Authenticated</span>
+                        </div>
+                        <div class="endpoint-description">
+                            <p>Adds a movie to the user's favorites. Requires authentication.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="get-cart" class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="endpoint-path">/api/users/cart</span>
+                            <span class="badge">Authenticated</span>
+                        </div>
+                        <div class="endpoint-description">
+                            <p>Returns the user's cart items. Requires authentication.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="add-to-cart" class="endpoint-card">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="endpoint-path">/api/users/cart</span>
+                            <span class="badge">Authenticated</span>
+                        </div>
+                        <div class="endpoint-description">
+                            <p>Adds a movie to the user's cart. Requires authentication.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="error-handling" class="doc-section">
+                <h2>Error Handling</h2>
+                <p>The API returns standard HTTP status codes to indicate the success or failure of an API request, along with additional error details when applicable.</p>
+                
+                <div class="error-cards">
+                    <div class="error-card">
+                        <div class="error-status">400</div>
+                        <div class="error-details">
+                            <h3>Bad Request</h3>
+                            <p>The request was invalid or cannot be otherwise served. An accompanying error message will explain further.</p>
+                            <div class="code-snippet">
+                                <pre class="code-block"><code class="language-json">{
+  "message": "Missing required field: username"
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="error-card">
+                        <div class="error-status">401</div>
+                        <div class="error-details">
+                            <h3>Unauthorized</h3>
+                            <p>Authentication is required and has failed or has not been provided.</p>
+                            <div class="code-snippet">
+                                <pre class="code-block"><code class="language-json">{
+  "message": "Missing Authorization Header"
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="error-card">
+                        <div class="error-status">404</div>
+                        <div class="error-details">
+                            <h3>Not Found</h3>
+                            <p>The requested resource could not be found.</p>
+                            <div class="code-snippet">
+                                <pre class="code-block"><code class="language-json">{
+  "message": "Movie not found"
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="error-card">
+                        <div class="error-status">500</div>
+                        <div class="error-details">
+                            <h3>Internal Server Error</h3>
+                            <p>An unexpected condition was encountered on the server.</p>
+                            <div class="code-snippet">
+                                <pre class="code-block"><code class="language-json">{
+  "message": "Internal server error"
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="rate-limiting" class="doc-section">
+                <h2>Rate Limiting</h2>
+                <p>To ensure the stability of our service, the API implements rate limiting on all endpoints.</p>
+                
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Plan</th>
+                            <th>Rate Limit</th>
+                            <th>Reset Period</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Free</td>
+                            <td>100 requests</td>
+                            <td>Per hour</td>
+                        </tr>
+                        <tr>
+                            <td>Developer</td>
+                            <td>1,000 requests</td>
+                            <td>Per hour</td>
+                        </tr>
+                        <tr>
+                            <td>Professional</td>
+                            <td>10,000 requests</td>
+                            <td>Per hour</td>
+                        </tr>
+                        <tr>
+                            <td>Enterprise</td>
+                            <td>Custom</td>
+                            <td>Custom</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="callout warning">
+                    <div class="callout-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="callout-content">
+                        <h4>Rate Limit Headers</h4>
+                        <p>The API includes rate limit information in the response headers:</p>
+                        <ul>
+                            <li><code>X-RateLimit-Limit</code>: The maximum number of requests allowed per hour</li>
+                            <li><code>X-RateLimit-Remaining</code>: The number of requests remaining in the current period</li>
+                            <li><code>X-RateLimit-Reset</code>: The time at which the current rate limit window resets (UTC epoch seconds)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sdk-libraries" class="doc-section">
+                <h2>SDK Libraries</h2>
+                <p>We provide official client libraries to help you integrate with our API more easily.</p>
+                
+                <div class="sdk-cards">
+                    <div class="sdk-card">
+                        <div class="sdk-icon">
+                            <i class="fab fa-js"></i>
+                        </div>
+                        <h3>JavaScript</h3>
+                        <p>Official JavaScript client for browser and Node.js</p>
+                        <a href="#" class="btn">Documentation</a>
+                    </div>
+                    
+                    <div class="sdk-card">
+                        <div class="sdk-icon">
+                            <i class="fab fa-python"></i>
+                        </div>
+                        <h3>Python</h3>
+                        <p>Python client library for integrating with the API</p>
+                        <a href="#" class="btn">Documentation</a>
+                    </div>
+                    
+                    <div class="sdk-card">
+                        <div class="sdk-icon">
+                            <i class="fab fa-php"></i>
+                        </div>
+                        <h3>PHP</h3>
+                        <p>PHP client for AfroMovies API integration</p>
+                        <a href="#" class="btn">Documentation</a>
+                    </div>
+                    
+                    <div class="sdk-card">
+                        <div class="sdk-icon">
+                            <i class="fab fa-java"></i>
+                        </div>
+                        <h3>Java</h3>
+                        <p>Java SDK for enterprise applications</p>
+                        <a href="#" class="btn">Documentation</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+    <script>
+
+        // Add this to your existing JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create mobile menu button and overlay
+            const mobileMenuBtn = document.createElement('button');
+            mobileMenuBtn.classList.add('mobile-menu-btn');
+            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            document.body.appendChild(mobileMenuBtn);
+            
+            const sidebarOverlay = document.createElement('div');
+            sidebarOverlay.classList.add('sidebar-overlay');
+            document.body.appendChild(sidebarOverlay);
+            
+            // Add skip to content link for accessibility
+            const skipLink = document.createElement('a');
+            skipLink.href = '#introduction';
+            skipLink.classList.add('skip-to-content');
+            skipLink.textContent = 'Skip to content';
+            document.body.prepend(skipLink);
+            
+            // Mobile menu functionality
+            mobileMenuBtn.addEventListener('click', function() {
+                document.querySelector('.documentation-layout').classList.add('sidebar-open');
+                document.querySelector('.sidebar-overlay').classList.add('active');
+            });
+            
+            sidebarOverlay.addEventListener('click', function() {
+                document.querySelector('.documentation-layout').classList.remove('sidebar-open');
+                document.querySelector('.sidebar-overlay').classList.remove('active');
+            });
+            
+            // Make tables responsive
+            const tables = document.querySelectorAll('table');
+            tables.forEach(table => {
+                const wrapper = document.createElement('div');
+                wrapper.style.overflowX = 'auto';
+                table.parentNode.insertBefore(wrapper, table);
+                wrapper.appendChild(table);
+            });
+            
+            // Add proper aria attributes to tabs
+            const tabGroups = document.querySelectorAll('.tabs');
+            tabGroups.forEach((tabGroup, groupIndex) => {
+                const buttons = tabGroup.querySelectorAll('.tab-btn');
+                const panels = tabGroup.querySelectorAll('.tab-content');
+                
+                buttons.forEach((button, index) => {
+                    const id = `tab-${groupIndex}-${index}`;
+                    const panelId = `panel-${groupIndex}-${index}`;
+                    
+                    button.setAttribute('role', 'tab');
+                    button.setAttribute('id', id);
+                    button.setAttribute('aria-controls', panelId);
+                    button.setAttribute('aria-selected', button.classList.contains('active'));
+                    
+                    panels[index].setAttribute('role', 'tabpanel');
+                    panels[index].setAttribute('id', panelId);
+                    panels[index].setAttribute('aria-labelledby', id);
+                });
+            });
+        });
+
+        // Initialize syntax highlighting
+        document.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+        });
+        
+        // Sidebar toggle functionality
+        document.getElementById('sidebar-toggle').addEventListener('click', () => {
+            document.querySelector('.documentation-layout').classList.toggle('sidebar-collapsed');
+        });
+        
+        // Tab functionality
+        function openTab(evt, tabId) {
+            // Hide all tab content
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.getElementsByClassName('tab-btn');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+            
+            // Show the selected tab and add active class to the button
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+        
+        // Copy text functionality
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard');
+            }, (err) => {
+                console.error('Could not copy text: ', err);
+            });
+        }
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Scroll to the section
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
