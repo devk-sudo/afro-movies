@@ -9,9 +9,6 @@ from routes.users import users_bp
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# Print the MONGO_URI for debugging
-print("MONGO_URI:", app.config.get("MONGO_URI"))
-
 # Initialize MongoDB
 mongo = PyMongo(app)
 
@@ -20,7 +17,6 @@ if mongo.db is None:
     raise RuntimeError("MongoDB connection failed: mongo.db is None")
 try:
     mongo.db.command("ping")  # Sends a ping command to the MongoDB server
-    print("Successfully connected to MongoDB!")
 except Exception as e:
     raise RuntimeError(f"Failed to connect to MongoDB: {str(e)}")
 
